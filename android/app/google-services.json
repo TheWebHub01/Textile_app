@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "899109364547",
+    "project_id": "textile-app-eed16",
+    "storage_bucket": "textile-app-eed16.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:899109364547:android:60f15ae199bb386243c5f6",
+        "android_client_info": {
+          "package_name": "com.textile_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "899109364547-bmrl43gfog2mmmd67n7e31l3or5bng8g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWLPyQr31Ej8oM_gXDLPfX6Z6lZ8PlWqY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "899109364547-bmrl43gfog2mmmd67n7e31l3or5bng8g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
