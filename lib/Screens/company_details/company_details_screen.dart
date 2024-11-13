@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:textile_app/controller/data_controller.dart';
 import 'package:textile_app/utils/widget.dart';
+import 'package:textile_app/widget/search_bar.dart';
 
 class CompanyDetailsScreen extends StatefulWidget {
   const CompanyDetailsScreen({super.key});
@@ -10,6 +13,9 @@ class CompanyDetailsScreen extends StatefulWidget {
 }
 
 class _CompanyDetailsScreenState extends State<CompanyDetailsScreen> {
+  dataController controller = Get.put(dataController());
+  TextEditingController searchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -41,12 +47,11 @@ class _CompanyDetailsScreenState extends State<CompanyDetailsScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: CustomSearchbar(
-              "Search Account...",
-              (p0) {},
-            ),
-          ),
+              padding: const EdgeInsets.all(8.0),
+              child: CustomeSearchbar(
+                controller: searchController,
+                onSearchChanged: (p0) {},
+              )),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Container(

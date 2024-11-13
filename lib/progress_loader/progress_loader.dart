@@ -86,7 +86,7 @@ class LoaderBody extends StatelessWidget {
     return const Center(
       // child: SizedBox(height: 150, width: 150, child: Lottie.asset('assets/animation/anm_common_loader.json')),
       child: CircularProgressIndicator(
-        color: Color(0xffAA864E),
+        color: Color(0xFF0D5785),
       ),
     );
   }

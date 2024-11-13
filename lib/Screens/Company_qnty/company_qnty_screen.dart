@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:textile_app/controller/data_controller.dart';
 import 'package:textile_app/utils/widget.dart';
+import 'package:textile_app/widget/search_bar.dart';
 
 class CompanyQntyScreen extends StatefulWidget {
   const CompanyQntyScreen({super.key});
@@ -12,7 +13,8 @@ class CompanyQntyScreen extends StatefulWidget {
 }
 
 class _CompanyQntyScreenState extends State<CompanyQntyScreen> {
-  final dataController dateRangeController = Get.put(dataController());
+  final dataController controller = Get.put(dataController());
+  TextEditingController searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +63,7 @@ class _CompanyQntyScreenState extends State<CompanyQntyScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               getCustomFont(
-                                dateRangeController.startDate.value
+                                controller.startDate.value
                                     .toString()
                                     .split(' ')[0],
                                 fontWeight: FontWeight.w500,
@@ -77,7 +79,7 @@ class _CompanyQntyScreenState extends State<CompanyQntyScreen> {
                               ),
                               horizontalSpace(10.w),
                               getCustomFont(
-                                dateRangeController.endDate.value
+                                controller.endDate.value
                                     .toString()
                                     .split(' ')[0],
                                 fontWeight: FontWeight.w500,
@@ -127,12 +129,11 @@ class _CompanyQntyScreenState extends State<CompanyQntyScreen> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: CustomSearchbar(
-                "Search Account...",
-                (p0) {},
-              ),
-            ),
+                padding: const EdgeInsets.all(8.0),
+                child: CustomeSearchbar(
+                  controller: searchController,
+                  onSearchChanged: (p0) {},
+                )),
             Container(
               height: 40,
               color: const Color(0xff0D5785),

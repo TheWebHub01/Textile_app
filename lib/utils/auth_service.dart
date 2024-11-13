@@ -30,32 +30,19 @@ class AuthService {
 
         if (!userSnapshot.exists) {
           await userDoc.set({
-            'name': user.displayName,
             'email': user.email,
-            'approved': false, // Set default approval status
           }).catchError((error) {
             print("Error writing to Firestore: $error");
           });
         }
 
-        // Check if the user is approved
-        if (userSnapshot.data()?['approved'] == true) {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          await prefs.setString('userid', user.uid);
-          await prefs.setString('email', user.email!);
-          await prefs.setString('name', user.displayName ?? '');
+        // Store user data in SharedPreferences
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('userid', user.uid);
+        await prefs.setString('email', user.email!);
 
-          print('User ID stored: ${user.uid}');
-          return user;
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                content: Text(
-                    'You are not eligible for login. Please wait at least 24 hours.')),
-          );
-          await FirebaseAuth.instance.signOut();
-          return null;
-        }
+        print('User ID stored: ${user.uid}');
+        return user;
       }
       return null;
     } catch (e) {

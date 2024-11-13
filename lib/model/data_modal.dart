@@ -3,7 +3,7 @@ class datamodel {
   String title;
 
   datamodel({
-     this.images,
+    this.images,
     required this.title,
   });
 }
@@ -14,4 +14,12 @@ class Balance {
   String images;
 
   Balance({required this.title, required this.balance, required this.images});
+}
+
+class Company {
+  String title;
+  String balance;
+  String address;
+
+  Company({required this.title, required this.balance, required this.address});
 }

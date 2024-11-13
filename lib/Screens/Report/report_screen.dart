@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:textile_app/Screens/ReportRecive/report_recive_screen.dart';
 import 'package:textile_app/utils/widget.dart';
+import 'package:textile_app/widget/appbar.dart';
+import 'package:textile_app/widget/custom_textfild.dart';
 
 class ReportScreen extends StatefulWidget {
   final String title;
@@ -19,15 +21,6 @@ class _ReportScreenState extends State<ReportScreen> {
   TextEditingController dueInvoiceDaysController = TextEditingController();
   TextEditingController startDateController = TextEditingController();
   TextEditingController endDateController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    reportOnController.text = "Party Wise";
-    dueInvoiceDaysController.text = "00";
-    startDateController.text = "01-04-2024";
-    endDateController.text = "01-09-2024";
-  }
 
   Future<void> _selectDate(
       BuildContext context, TextEditingController controller) async {
@@ -46,197 +39,125 @@ class _ReportScreenState extends State<ReportScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              height: 60,
-              color: const Color(0xff0D5785),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Scaffold(
+      appBar: customAppbar(
+        context,
+        widget.title,
+        false,
+        () {},
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(left: 15.w, right: 15.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                verticalSpace(15.h),
+                Center(
+                    child: getCustomFont("Outstanding Report",
+                        textSize: 20.sp, textColor: const Color(0xff000000))),
+                verticalSpace(10.h),
+                getCustomFont("Report On",
+                    textColor: const Color(0xff686868), textSize: 13.sp),
+                verticalSpace(8.h),
+                customTextformfield(
+                    "Enter Report On",
+                    "",
+                    reportOnController,
+                    null,
+                    labelText: false,
+                    TextInputType.emailAddress,
+                    false,
+                    null,
+                    null),
+                verticalSpace(10.h),
+                getCustomFont("Due Invoice Days",
+                    textColor: const Color(0xff686868), textSize: 13.sp),
+                verticalSpace(8.h),
+                customTextformfield(
+                    "Enter invoice days",
+                    labelText: false,
+                    "",
+                    dueInvoiceDaysController,
+                    null,
+                    TextInputType.emailAddress,
+                    false,
+                    null,
+                    null),
+                verticalSpace(10.h),
+                getCustomFont("Period",
+                    textColor: const Color(0xff686868), textSize: 13.sp),
+                verticalSpace(8.h),
+                Row(
                   children: [
-                    GestureDetector(
-                      onTap: () {
-                        Get.back();
-                      },
-                      child:
-                          getAssetWidget("back.svg", height: 26.h, width: 26.h),
+                    Expanded(
+                      child: customTextformfield(
+                        "Start Date",
+                        labelText: false,
+                        "",
+                        startDateController,
+                        null,
+                        TextInputType.emailAddress,
+                        false,
+                        null,
+                        null,
+                        readOnly: true,
+                        onTap: () => _selectDate(context, startDateController),
+                      ),
                     ),
-                    getCustomFont(
-                      widget.title,
-                      textColor: Colors.white,
-                      textSize: 19.sp,
-                      fontWeight: FontWeight.w400,
+                    horizontalSpace(10.w),
+                    getCustomFont("to",
+                        textColor: const Color(0xff9A9A9A), textSize: 17.sp),
+                    horizontalSpace(10.w),
+                    Expanded(
+                      child: customTextformfield(
+                        "end Date",
+                        labelText: false,
+                        "",
+                        endDateController,
+                        null,
+                        TextInputType.emailAddress,
+                        false,
+                        null,
+                        null,
+                        readOnly: true,
+                        onTap: () => _selectDate(context, endDateController),
+                      ),
                     ),
-                    const SizedBox(),
                   ],
                 ),
-              ),
+                verticalSpace(40.h),
+                GestureDetector(
+                  onTap: () {
+                    String originalText = widget.title;
+                    String modifiedText = originalText
+                        .substring(0, originalText.indexOf('('))
+                        .trim();
+                    Get.to(ReportReciveScreen(
+                      title: modifiedText,
+                      startDate: startDateController.text,
+                      endDate: endDateController.text,
+                    ));
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    height: 50.h,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12.h),
+                        color: const Color(0xff0D5785)),
+                    child: getCustomFont("Generate Report",
+                        fontWeight: FontWeight.w500,
+                        textSize: 18.sp,
+                        textColor: Colors.white),
+                  ),
+                ),
+              ],
             ),
-            Padding(
-              padding: EdgeInsets.only(left: 15.w, right: 15.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  verticalSpace(15.h),
-                  Center(
-                      child: getCustomFont("Outstanding Report",
-                          textSize: 20.sp, textColor: const Color(0xff000000))),
-                  verticalSpace(10.h),
-                  getCustomFont("Report On",
-                      textColor: const Color(0xff686868), textSize: 13.sp),
-                  verticalSpace(8.h),
-                  TextFormField(
-                    controller: reportOnController,
-                    decoration: const InputDecoration(
-                        labelStyle: TextStyle(color: Color(0xff797979)),
-                        hintText: 'Party Wise',
-                        enabled: true,
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xffCDCDCD)),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10),
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xffCDCDCD)),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10),
-                          ),
-                        ),
-                        border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xffCDCDCD)))),
-                  ),
-                  verticalSpace(10.h),
-                  getCustomFont("Due Invoice Days",
-                      textColor: const Color(0xff686868), textSize: 13.sp),
-                  verticalSpace(8.h),
-                  TextFormField(
-                    controller: dueInvoiceDaysController,
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      labelStyle: TextStyle(color: Color(0xff797979)),
-                      enabled: true,
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xffCDCDCD)),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10),
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xffCDCDCD)),
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10),
-                        ),
-                      ),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color(0xffCDCDCD),
-                        ),
-                      ),
-                    ),
-                  ),
-                  verticalSpace(10.h),
-                  getCustomFont("Period",
-                      textColor: const Color(0xff686868), textSize: 13.sp),
-                  verticalSpace(8.h),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextFormField(
-                          readOnly: true,
-                          controller: startDateController,
-                          keyboardType: TextInputType.number,
-                          onTap: () =>
-                              _selectDate(context, startDateController),
-                          decoration: const InputDecoration(
-                            labelStyle: TextStyle(color: Color(0xff797979)),
-                            enabled: true,
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Color(0xffCDCDCD)),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10),
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Color(0xffCDCDCD)),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10),
-                              ),
-                            ),
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Color(0xffCDCDCD),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      horizontalSpace(10.w),
-                      getCustomFont("to",
-                          textColor: const Color(0xff9A9A9A), textSize: 17.sp),
-                      horizontalSpace(10.w),
-                      Expanded(
-                        child: TextFormField(
-                          controller: endDateController,
-                          readOnly: true,
-                          onTap: () => _selectDate(context, endDateController),
-                          decoration: const InputDecoration(
-                            labelStyle: TextStyle(color: Color(0xff797979)),
-                            enabled: true,
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Color(0xffCDCDCD)),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10),
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Color(0xffCDCDCD)),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10),
-                              ),
-                            ),
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Color(0xffCDCDCD),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  verticalSpace(40.h),
-                  GestureDetector(
-                    onTap: () {
-                      String originalText = widget.title;
-                      String modifiedText = originalText
-                          .substring(0, originalText.indexOf('('))
-                          .trim();
-                      Get.to(ReportReciveScreen(title: modifiedText));
-                    },
-                    child: Container(
-                      width: double.infinity,
-                      height: 50.h,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12.h),
-                          color: const Color(0xff0D5785)),
-                      child: getCustomFont("Generate Report",
-                          fontWeight: FontWeight.w500,
-                          textSize: 18.sp,
-                          textColor: Colors.white),
-                    ),
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
+          )
+        ],
       ),
     );
   }

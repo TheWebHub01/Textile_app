@@ -2,18 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 TextFormField customTextformfield(
-  String hintText,
-  String label,
-  String prefixImagePath,
-  TextEditingController controller,
-  String? Function(String?)? validator,
-  TextInputType? keyboardType,
-  bool password,
-  bool? passwordVisible,
-  VoidCallback? togglePasswordVisibility, {
-  bool isMobile = false,
-}) {
+    String hintText,
+    String label,
+    TextEditingController controller,
+    String? Function(String?)? validator,
+    TextInputType? keyboardType,
+    bool password,
+    bool? passwordVisible,
+    VoidCallback? togglePasswordVisibility,
+    {bool isMobile = false,
+    void Function()? onTap,
+    bool labelText = false,
+    bool readOnly = false}) {
   return TextFormField(
+    onTap: onTap,
+    readOnly: readOnly,
     validator: validator,
     keyboardType: keyboardType,
     controller: controller,
@@ -21,7 +24,7 @@ TextFormField customTextformfield(
     textInputAction: isMobile ? TextInputAction.done : TextInputAction.next,
     decoration: InputDecoration(
       hintText: hintText,
-      label: Text(label),
+      label: labelText ? Text(label) : null,
       suffixIcon: password
           ? GestureDetector(
               onTap: togglePasswordVisibility,
@@ -40,11 +43,11 @@ TextFormField customTextformfield(
               width: 10,
             ),
       enabledBorder: OutlineInputBorder(
-        borderSide: const BorderSide(color: Color(0xFFDADADA)),
+        borderSide: const BorderSide(color: Color(0xFFC1C1C1)),
         borderRadius: BorderRadius.circular(10),
       ),
       border: OutlineInputBorder(
-        borderSide: const BorderSide(color: Color(0xFFDADADA)),
+        borderSide: const BorderSide(color: Color(0xFFC1C1C1)),
         borderRadius: BorderRadius.circular(10),
       ),
     ),

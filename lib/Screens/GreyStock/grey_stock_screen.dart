@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:textile_app/controller/data_controller.dart';
 import 'package:textile_app/controller/stock_controller.dart';
 import 'package:textile_app/utils/widget.dart';
+import 'package:textile_app/widget/search_bar.dart';
 
 class GreyStockScreen extends StatefulWidget {
   const GreyStockScreen({super.key});
@@ -13,6 +15,8 @@ class GreyStockScreen extends StatefulWidget {
 
 class _GreyStockScreenState extends State<GreyStockScreen> {
   final StockController stockController = Get.put(StockController());
+  final dataController controller = Get.put(dataController());
+  TextEditingController searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -105,9 +109,9 @@ class _GreyStockScreenState extends State<GreyStockScreen> {
                 title: getCustomFont("Skip 0 Balance?",
                     textColor: const Color(0xff494949))),
 
-            CustomSearchbar(
-              "Search Account...",
-              (p0) {},
+            CustomeSearchbar(
+              controller: searchController,
+              onSearchChanged: (p0) {},
             ),
             // Header Row
             Container(

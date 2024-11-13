@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 AppBar customAppbar(BuildContext context, String title, bool active,
-    GlobalKey<ScaffoldState>? scaffoldkey) {
+    void Function()? onPressed) {
   return AppBar(
     centerTitle: true,
+    backgroundColor: Color(0xff0D5785),
     leading: TextButton(
         onPressed: () {
           Navigator.pop(context);
@@ -12,15 +13,13 @@ AppBar customAppbar(BuildContext context, String title, bool active,
         child: SvgPicture.asset("assets/svg/back.svg")),
     title: Text(
       title,
-      style: const TextStyle(color: Colors.black, fontSize: 18),
+      style: const TextStyle(color: Colors.white, fontSize: 18),
     ),
     actions: [
       active
           ? TextButton(
-              onPressed: () {
-                scaffoldkey!.currentState?.openDrawer();
-              },
-              child: SvgPicture.asset("assets/svg/filtter.svg"))
+              onPressed: onPressed,
+              child: SvgPicture.asset("assets/svg/pdf.svg"))
           : Container(),
     ],
   );

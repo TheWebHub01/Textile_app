@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:textile_app/utils/widget.dart';
+import 'package:textile_app/widget/custom_textfild.dart';
 
 class ForgotScreen extends StatefulWidget {
   const ForgotScreen({super.key});
@@ -10,11 +12,26 @@ class ForgotScreen extends StatefulWidget {
 }
 
 class _ForgotScreenState extends State<ForgotScreen> {
-  final _confiromPassword = TextEditingController();
-  final _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
 
-  bool _isObscured = true;
-  bool _isObscured1 = true;
+  final _formKey = GlobalKey<FormState>();
+
+  Future<void> _resetPassword() async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        await FirebaseAuth.instance
+            .sendPasswordResetEmail(email: _emailController.text);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text('Password reset email sent. Check your inbox.')),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${e.toString()}')),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,74 +57,16 @@ class _ForgotScreenState extends State<ForgotScreen> {
                     TextStyle(color: const Color(0xff8A8A8A), fontSize: 14.sp),
               ),
               verticalSpace(12.h),
-              TextFormField(
-                controller: _passwordController,
-                decoration: InputDecoration(
-                    labelText: 'Password',
-                    labelStyle: const TextStyle(color: Color(0xff797979)),
-                    hintText: 'Enter Your password',
-                    enabled: true,
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _isObscured ? Icons.visibility : Icons.visibility_off,
-                        color: const Color(0xffC5C5C5),
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _isObscured = !_isObscured;
-                        });
-                      },
-                    ),
-                    enabledBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xffCDCDCD))),
-                    focusedBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xffCDCDCD))),
-                    border: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xffCDCDCD)))),
-                obscureText: _isObscured,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a password';
-                  }
-                  return null;
-                },
-              ),
-              verticalSpace(10.h),
-              TextFormField(
-                controller: _confiromPassword,
-                decoration: InputDecoration(
-                    labelText: 'Confirm Password',
-                    labelStyle: const TextStyle(color: Color(0xff797979)),
-                    hintText: 'Enter Your password',
-                    enabled: true,
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _isObscured1 ? Icons.visibility : Icons.visibility_off,
-                        color: const Color(0xffC5C5C5),
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _isObscured1 = !_isObscured1;
-                        });
-                      },
-                    ),
-                    enabledBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xffCDCDCD))),
-                    focusedBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xffCDCDCD))),
-                    border: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xffCDCDCD)))),
-                obscureText: _isObscured1,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a password';
-                  }
-                  return null;
-                },
-              ),
-              verticalSpace(20.h),
+              customTextformfield("Enter E-mail", "E-mail", _emailController,
+                  (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter your email';
+                }
+                return null;
+              }, TextInputType.emailAddress, false, null, null),
+              verticalSpace(15.h),
               GestureDetector(
-                onTap: () {},
+                onTap: _resetPassword,
                 child: Container(
                   width: double.infinity,
                   height: 60.h,

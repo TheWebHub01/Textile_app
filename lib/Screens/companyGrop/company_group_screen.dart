@@ -19,6 +19,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:textile_app/controller/data_controller.dart';
 import 'package:textile_app/utils/widget.dart';
+import 'package:textile_app/widget/search_bar.dart';
 
 class CompanyGroupScreen extends StatefulWidget {
   const CompanyGroupScreen({super.key});
@@ -29,6 +30,7 @@ class CompanyGroupScreen extends StatefulWidget {
 
 class _CompanyGroupScreenState extends State<CompanyGroupScreen> {
   dataController controller = Get.put(dataController());
+  TextEditingController searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -70,10 +72,9 @@ class _CompanyGroupScreenState extends State<CompanyGroupScreen> {
               ),
             ),
           ),
-
-          CustomSearchbar(
-            "Search Account...",
-            (p0) {},
+          CustomeSearchbar(
+            controller: searchController,
+            onSearchChanged: (p0) {},
           ),
           // Search Field
           // Padding(
@@ -185,7 +186,6 @@ class _CompanyGroupScreenState extends State<CompanyGroupScreen> {
           //     ],
           //   ),
           // ),
-
           Obx(
             () => Expanded(
               child: ListView.builder(

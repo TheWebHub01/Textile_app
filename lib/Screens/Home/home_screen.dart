@@ -49,7 +49,7 @@ class _PurchaseOutstandingState extends State<PurchaseOutstanding> {
               children: [
                 Row(
                   children: [
-                    getCustomFont("Last Synced:",
+                    getCustomFont("Last Synced:           ",
                         textColor: const Color(0xffffffff), textSize: 18.sp),
                     getCustomFont(formattedDate,
                         textColor: const Color(0xffffffff), textSize: 16.sp),

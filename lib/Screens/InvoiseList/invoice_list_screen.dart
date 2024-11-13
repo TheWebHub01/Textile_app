@@ -4,11 +4,19 @@ import 'package:get/get.dart';
 import 'package:textile_app/Screens/Calculate/calculate_screen.dart';
 import 'package:textile_app/controller/data_controller.dart';
 import 'package:textile_app/utils/widget.dart';
+import 'package:textile_app/widget/appbar.dart';
+import 'package:textile_app/widget/search_bar.dart';
 
 class InvoiceListScreen extends StatefulWidget {
   final String title;
+  final String startDate;
+  final String endDate;
 
-  const InvoiceListScreen({super.key, required this.title});
+  const InvoiceListScreen(
+      {super.key,
+      required this.title,
+      required this.startDate,
+      required this.endDate});
 
   @override
   State<InvoiceListScreen> createState() => _InvoiceListScreenState();
@@ -16,19 +24,63 @@ class InvoiceListScreen extends StatefulWidget {
 
 class _InvoiceListScreenState extends State<InvoiceListScreen> {
   final dataController controller = Get.put(dataController());
+  void filterSearchResults(String query) {
+    if (query.isEmpty) {
+      setState(() {
+        filteredInvoices.value = controller.invoices;
+      });
+    } else {
+      setState(() {
+        filteredInvoices.value = controller.invoices.where((invoice) {
+          return (invoice['billNo'] as String)
+                  .toLowerCase()
+                  .contains(query.toLowerCase()) ||
+              (invoice['date'] as String)
+                  .toLowerCase()
+                  .contains(query.toLowerCase()) ||
+              (invoice['amount'] as String)
+                  .toLowerCase()
+                  .contains(query.toLowerCase()) ||
+              (invoice['fix'] as String)
+                  .toLowerCase()
+                  .contains(query.toLowerCase()) ||
+              (invoice['due'] as String)
+                  .toLowerCase()
+                  .contains(query.toLowerCase());
+        }).toList();
+      });
+    }
+  }
+
+  var filteredInvoices = [].obs; // Observable list for filtered invoices
+
+  TextEditingController searchController = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    filteredInvoices.value = controller.invoices;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
+    return Scaffold(
+      appBar: customAppbar(
+        context,
+        widget.title,
+        true,
+        () {},
+      ),
       floatingActionButton: Align(
-        alignment: const Alignment(0.9, 0.8), // X and Y alignment
-
+        alignment: const Alignment(0.9, 0.9),
         child: FloatingActionButton(
           backgroundColor: const Color(0xff0D5785),
           onPressed: () {
             Get.to(CalculateScreen(
               title: widget.title,
+              endDate: widget.endDate,
+              startDate: widget.startDate,
             ));
           },
           child: getAssetWidget("cals.svg"),
@@ -36,32 +88,6 @@ class _InvoiceListScreenState extends State<InvoiceListScreen> {
       ),
       body: Column(
         children: [
-          Container(
-            height: 60,
-            color: const Color(0xff0D5785),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Get.back();
-                    },
-                    child:
-                        getAssetWidget("back.svg", height: 26.h, width: 26.h),
-                  ),
-                  getCustomFont(
-                    widget.title,
-                    textColor: Colors.white,
-                    textSize: 19.sp,
-                    fontWeight: FontWeight.w400,
-                  ),
-                  getAssetWidget("pdf.svg"),
-                ],
-              ),
-            ),
-          ),
           verticalSpace(10.h),
           AccountCard(
             companyName: 'Varni Infotech',
@@ -71,23 +97,25 @@ class _InvoiceListScreenState extends State<InvoiceListScreen> {
             broker: "DIRECT",
             onWhatsAppPressed: () {},
             onCallPressed: () {},
-            date: '10-09-2024',
+            date: widget.startDate,
           ),
-          // verticalSpace(10.h),
+          verticalSpace(10.h),
           Padding(
-            padding: const EdgeInsets.only(right: 8.0, left: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Row(
               children: [
                 Expanded(
-                  child: CustomSearchbar(
-                    'Search Account...',
-                    (value) => controller.updateSearchQuery(value),
-                  ),
-                ),
+                    child: CustomeSearchbar(
+                  controller: searchController,
+                  onSearchChanged: (p0) =>
+                      filterSearchResults(searchController.text),
+                )),
+                horizontalSpace(10),
                 Container(
-                  width: 83.w,
-                  height: 45.h,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 16),
                   decoration: BoxDecoration(
+                    color: const Color(0xffF6F6F6),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Center(
@@ -99,94 +127,239 @@ class _InvoiceListScreenState extends State<InvoiceListScreen> {
             ),
           ),
           verticalSpace(10.h),
-          Container(
-            height: 40,
-            color: const Color(0xff0D5785),
-            child: Padding(
-              padding: const EdgeInsets.only(right: 8.0, left: 8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Table(
+            columnWidths: const {
+              0: FlexColumnWidth(1.2),
+              1: FlexColumnWidth(1),
+              2: FlexColumnWidth(1),
+              3: FlexColumnWidth(1),
+              4: FlexColumnWidth(1),
+            },
+            children: const [
+              TableRow(
+                decoration: BoxDecoration(color: Color(0xff0D5785)),
                 children: [
-                  getCustomFont("Bill No",
-                      fontWeight: FontWeight.w600,
-                      textColor: Colors.white,
-                      textSize: 15),
-                  getCustomFont("Date",
-                      fontWeight: FontWeight.w600,
-                      textColor: Colors.white,
-                      textSize: 15),
-                  getCustomFont("Fix",
-                      fontWeight: FontWeight.w600,
-                      textColor: Colors.white,
-                      textSize: 15),
-                  getCustomFont("Due",
-                      fontWeight: FontWeight.w600,
-                      textColor: Colors.white,
-                      textSize: 15),
-                  getCustomFont("Amount",
-                      fontWeight: FontWeight.w600,
-                      textColor: Colors.white,
-                      textSize: 15),
-                ],
-              ),
-            ),
-          ),
-          Obx(
-            () => Expanded(
-              child: ListView.builder(
-                itemCount: controller.invoices.length,
-                itemBuilder: (context, index) {
-                  var invoice = controller.invoices[index];
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      color: const Color(0xff0D5785).withOpacity(0.1),
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(children: [
-                              Checkbox(
-                                value: controller.isChecked[index],
-                                activeColor: const Color(0xff0D5785),
-                                onChanged: (value) {
-                                  setState(() {
-                                    controller.isChecked[index] =
-                                        value ?? false;
-                                  });
-                                },
-                              ),
-                              Text(invoice['billNo']!),
-                            ]),
-                            Text(invoice['date']!),
-                            Text(invoice['fix']!),
-                            Text(invoice['due']!),
-                            Text(invoice['amount']!),
-                          ],
+                  SizedBox(
+                    height: 35,
+                    child: Center(
+                      child: Text(
+                        "Bill No",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
+                  ),
+                  SizedBox(
+                    height: 35,
+                    child: Center(
+                      child: Text("Date",
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          )),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 35,
+                    child: Center(
+                      child: Text(
+                        "Fix",
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 35,
+                    child: Center(
+                      child: Text("Due",
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          )),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 35,
+                    child: Center(
+                      child: Text(
+                        "Amount",
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          Expanded(
+            child: Obx(
+              () => ListView.builder(
+                itemCount: filteredInvoices.value.length,
+                itemBuilder: (context, index) {
+                  // var invoice = controller.invoices[index];
+                  var invoice = filteredInvoices.value[index];
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Table(
+                          columnWidths: const {
+                            0: FlexColumnWidth(1.2),
+                            1: FlexColumnWidth(1),
+                            2: FlexColumnWidth(1),
+                            3: FlexColumnWidth(1),
+                            4: FlexColumnWidth(1),
+                          },
+                          children: [
+                            TableRow(
+                              decoration: BoxDecoration(
+                                  color:
+                                      const Color(0xff0D5785).withOpacity(0.1)),
+                              children: [
+                                SizedBox(
+                                  height: 35,
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Checkbox(
+                                        value: invoice['chack'] == 'true',
+                                        onChanged: (value) {
+                                          setState(() {
+                                            invoice['chack'] = value == true
+                                                ? 'true'
+                                                : 'false';
+                                            print(
+                                                "invoice['chack']: => ${invoice['chack']}");
+                                          });
+                                        },
+                                        checkColor: Colors.white,
+                                        shape: const RoundedRectangleBorder(),
+                                        side: const BorderSide(
+                                            color: Color(0xff494949), width: 1),
+                                      ),
+                                      Text(
+                                        "${invoice['billNo']!}",
+                                        style: const TextStyle(
+                                            color: Color(0xff494949)),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 35,
+                                  child: Center(
+                                    child: Text("${invoice['date']!}",
+                                        style: const TextStyle(
+                                          color: Color(0xff494949),
+                                        )),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 35,
+                                  child: Center(
+                                    child: Text(
+                                      "${invoice['fix']!}",
+                                      style: const TextStyle(
+                                          color: Color(0xff494949)),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 35,
+                                  child: Center(
+                                    child: Text("${invoice['due']!}",
+                                        style: const TextStyle(
+                                          color: Color(0xff494949),
+                                        )),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 35,
+                                  child: Center(
+                                    child: Text(
+                                      "${invoice['amount']!}",
+                                      style: const TextStyle(
+                                          color: Color(0xff494949)),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   );
                 },
               ),
             ),
           ),
-          Container(
-            color: const Color(0xff0D5785),
-            padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24),
-            child: const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Bills: 01', style: TextStyle(color: Colors.white)),
-                Text('Onty: 507', style: TextStyle(color: Colors.white)),
-                Text('₹7,293.00', style: TextStyle(color: Colors.white)),
-              ],
-            ),
+          Table(
+            columnWidths: const {
+              0: FlexColumnWidth(1.2),
+              1: FlexColumnWidth(1),
+              2: FlexColumnWidth(1),
+            },
+            children: const [
+              TableRow(
+                decoration: BoxDecoration(color: Color(0xff0D5785)),
+                children: [
+                  SizedBox(
+                    height: 35,
+                    child: Center(
+                      child: Text(
+                        "Bills: 01",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 35,
+                    child: Center(
+                      child: Text("Onty: 507",
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          )),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 35,
+                    child: Center(
+                      child: Text(
+                        "₹7,293.00",
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ],
       ),
-    ));
+    );
   }
 }
 
@@ -200,6 +373,7 @@ class AccountCard extends StatelessWidget {
   final VoidCallback onCallPressed;
 
   const AccountCard({
+    super.key,
     required this.companyName,
     required this.address,
     required this.amount,
@@ -211,14 +385,14 @@ class AccountCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 122.h,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
+    return Container(
+      color: const Color(0xffF6F6F6),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -276,8 +450,8 @@ class AccountCard extends StatelessWidget {
                 ],
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

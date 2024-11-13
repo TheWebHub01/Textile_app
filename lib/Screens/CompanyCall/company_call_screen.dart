@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:textile_app/controller/data_controller.dart';
 import 'package:textile_app/utils/widget.dart';
+import 'package:textile_app/widget/search_bar.dart';
 
 class CompanyCallScreen extends StatefulWidget {
   const CompanyCallScreen({super.key});
@@ -13,6 +14,7 @@ class CompanyCallScreen extends StatefulWidget {
 
 class _CompanyCallScreenState extends State<CompanyCallScreen> {
   dataController controller = Get.put(dataController());
+  TextEditingController searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -47,12 +49,11 @@ class _CompanyCallScreenState extends State<CompanyCallScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: CustomSearchbar(
-              "Search Account...",
-              (p0) {},
-            ),
-          ),
+              padding: const EdgeInsets.all(8.0),
+              child: CustomeSearchbar(
+                controller:searchController,
+                onSearchChanged: (p0) {},
+              )),
           Expanded(
             child: ListView.builder(
               itemCount: controller.callList.length,

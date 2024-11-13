@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:textile_app/Screens/Forgot/forgot_password_screen.dart';
 import 'package:textile_app/Screens/Home/home_screen.dart';
 import 'package:textile_app/Screens/Signup/signup_screen.dart';
+import 'package:textile_app/Screens/companys_name.dart';
 import 'package:textile_app/progress_loader/progress_loader.dart';
 import 'package:textile_app/utils/auth_service.dart';
 import 'package:textile_app/utils/widget.dart';
@@ -121,16 +122,17 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: TextStyle(color: Color(0xff8A8A8A), fontSize: 17),
                   ),
                   verticalSpace(12.h),
-                  customTextformfield("Enter E-mail", "E-mail",
-                      "assets/svg/email.svg", _emailController, (value) {
+                  customTextformfield(
+                      "Enter E-mail", "E-mail", _emailController, (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your email';
                     }
                     return null;
                   }, TextInputType.emailAddress, false, null, null),
                   verticalSpace(10.h),
-                  customTextformfield("Enter Password", "Password",
-                      "assets/svg/password.svg", _passwordController, (value) {
+                  customTextformfield(
+                      "Enter Password", "Password", _passwordController,
+                      (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your password';
                     }
@@ -253,7 +255,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        const PurchaseOutstanding()),
+                                        const CompanysNameScreen()),
                               );
                             } else {
                               print('Login failed');

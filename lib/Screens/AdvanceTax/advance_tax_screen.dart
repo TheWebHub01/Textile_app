@@ -3,66 +3,27 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:textile_app/controller/data_controller.dart';
 import 'package:textile_app/utils/widget.dart';
+import 'package:textile_app/widget/appbar.dart';
 
 class AdvanceTaxScreen extends StatelessWidget {
+  AdvanceTaxScreen({super.key});
   final dataController dateRangeController = Get.put(dataController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text("Advance Tax"),
-      //   leading: IconButton(
-      //     icon: Icon(Icons.arrow_back),
-      //     onPressed: () {
-      //       // Navigate back
-      //       Navigator.pop(context);
-      //     },
-      //   ),
-      //   actions: [
-      //     IconButton(
-      //       icon: Icon(Icons.picture_as_pdf),
-      //       onPressed: () {
-      //         // Implement PDF download functionality
-      //       },
-      //     ),
-      //   ],
-      // ),
+      appBar: customAppbar(
+        context,
+        "Advance Tax",
+        true,
+        () {},
+      ),
       body: Column(
         children: [
-          // Date Range Selector Row
-
-          ///appbar
+          verticalSpace(5.h),
           Container(
-            height: 60,
-            color: const Color(0xff0D5785),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Get.back();
-                    },
-                    child:
-                        getAssetWidget("back.svg", height: 26.h, width: 26.h),
-                  ),
-                  getCustomFont(
-                    "Advance Tax",
-                    textColor: Colors.white,
-                    textSize: 19.sp,
-                    fontWeight: FontWeight.w400,
-                  ),
-                  // SizedBox(),
-                  getAssetWidget("pdf.svg"),
-                ],
-              ),
-            ),
-          ),
-
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            color: Colors.black.withOpacity(0.1),
+            padding: const EdgeInsets.symmetric(vertical: 12.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -105,11 +66,9 @@ class AdvanceTaxScreen extends StatelessWidget {
               ],
             ),
           ),
-
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.only(top: 10, left: 15, right: 15),
             child: Container(
-              height: 70,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(color: const Color(0xffC1C1C1))),

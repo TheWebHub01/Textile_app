@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:textile_app/controller/data_controller.dart';
 import 'package:textile_app/utils/widget.dart';
+import 'package:textile_app/widget/search_bar.dart';
 
 class BeamScreen extends StatefulWidget {
   const BeamScreen({super.key});
@@ -13,6 +14,7 @@ class BeamScreen extends StatefulWidget {
 
 class _BeamScreenState extends State<BeamScreen> {
   dataController controller = Get.put(dataController());
+  TextEditingController searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -52,11 +54,10 @@ class _BeamScreenState extends State<BeamScreen> {
             child: Row(
               children: [
                 Expanded(
-                  child: CustomSearchbar(
-                    "Search Beam/Quality...",
-                    (p0) {},
-                  ),
-                ),
+                    child: CustomeSearchbar(
+                  controller: searchController,
+                  onSearchChanged: (p0) {},
+                )),
                 Container(
                   height: 45.h,
                   width: 95.w,

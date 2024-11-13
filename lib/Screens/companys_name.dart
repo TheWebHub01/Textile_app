@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:textile_app/Screens/Report/report_screen.dart';
 import 'package:textile_app/controller/data_controller.dart';
+import 'package:textile_app/progress_loader/progress_loader.dart';
 import 'package:textile_app/utils/widget.dart';
+import 'package:textile_app/widget/custom_drawer.dart';
 
 class CompanysNameScreen extends StatefulWidget {
   const CompanysNameScreen({super.key});
@@ -18,54 +21,52 @@ class _CompanysNameScreenState extends State<CompanysNameScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
+    ProgressLoader pl = ProgressLoader(context, isDismissible: true);
+
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        backgroundColor: const Color(0xff0D5785),
+        leading: TextButton(
+            onPressed: () {
+              _scaffoldKey.currentState?.openDrawer();
+            },
+            child: SvgPicture.asset("assets/svg/drawer.svg")),
+        title: const Text(
+          "TheWebHub",
+          style: TextStyle(color: Colors.white, fontSize: 18),
+        ),
+        actions: [
+          getCustomFont(
+            "V2.34",
+            textColor: Colors.white,
+            textSize: 15.sp,
+            fontWeight: FontWeight.w400,
+          ),
+          horizontalSpace(10.w),
+        ],
+      ),
       key: _scaffoldKey,
       drawer: const CustomDrawer(),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () async {
+          await pl.show();
+          await controller.refreshCompanyList(); // Fetch the updated list
+          await pl.hide();
+          setState(() {});
+        },
         backgroundColor: const Color(0xff0D5785),
         child: getAssetWidget('float.svg'),
       ),
       body: Column(
         children: [
-          Container(
-            height: 60,
-            color: const Color(0xff0D5785),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  GestureDetector(
-                    onTap: () {},
-                    child:
-                        getAssetWidget("drawer.svg", height: 26.h, width: 26.h),
-                  ),
-                  getCustomFont(
-                    "TheWebHub",
-                    textColor: Colors.white,
-                    textSize: 19.sp,
-                    fontWeight: FontWeight.w400,
-                  ),
-                  getCustomFont(
-                    "V2.34",
-                    textColor: Colors.white,
-                    textSize: 15.sp,
-                    fontWeight: FontWeight.w400,
-                  ),
-                  // const SizedBox(),
-                ],
-              ),
-            ),
-          ),
-          verticalSpace(20.h),
           Expanded(
             child: ListView.builder(
               itemCount: controller.companyList.length,
               itemBuilder: (context, index) {
                 return Padding(
-                  padding: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.only(
+                      left: 10, right: 10, bottom: 5, top: 10),
                   child: GestureDetector(
                     onTap: () {
                       Get.to(ReportScreen(
@@ -73,10 +74,9 @@ class _CompanysNameScreenState extends State<CompanysNameScreen> {
                       ));
                     },
                     child: Container(
-                      width: 335,
-                      height: 55,
+                      padding: const EdgeInsets.symmetric(vertical: 10),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(10.r),
                         border: Border.all(color: const Color(0xffC1C1C1)),
                       ),
                       child: Row(
@@ -94,54 +94,6 @@ class _CompanysNameScreenState extends State<CompanysNameScreen> {
                 );
               },
             ),
-          ),
-        ],
-      ),
-    ));
-  }
-}
-
-class CustomDrawer extends StatelessWidget {
-  const CustomDrawer({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          const DrawerHeader(
-            decoration: BoxDecoration(
-              color: Colors.blue,
-            ),
-            child: Text(
-              'Drawer Header',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24,
-              ),
-            ),
-          ),
-          ListTile(
-            leading: const Icon(Icons.home), //
-            title: const Text('Home'),
-            onTap: () {
-              Get.back(); // Close the drawer
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.settings),
-            title: const Text('Settings'),
-            onTap: () {
-              Get.back(); // Close the drawer
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.info),
-            title: const Text('About'),
-            onTap: () {
-              Get.back();
-            },
           ),
         ],
       ),

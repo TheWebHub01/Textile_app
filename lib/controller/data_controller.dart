@@ -30,6 +30,20 @@ class dataController extends ChangeNotifier {
     datamodel(images: "user.svg", title: "Munjapara Textile Pvt.Ltd. (02)"),
     datamodel(images: "user.svg", title: "Munjapara Textile......(01)"),
   ];
+  Future<void> refreshCompanyList() async {
+    var updatedList = await fetchUpdatedCompanyList();
+    companyList.assignAll(updatedList);
+  }
+
+  Future<List<datamodel>> fetchUpdatedCompanyList() async {
+    await Future.delayed(const Duration(seconds: 1));
+    return [
+      datamodel(images: "user.svg", title: "Munjapara Fabrics (03)"),
+      datamodel(images: "user.svg", title: "Munjapara Textile Pvt.Ltd. (02)"),
+      datamodel(images: "user.svg", title: "Munjapara Textile......(01)"),
+    ];
+  }
+
   List<datamodel> itemList = [
     datamodel(images: "user.svg", title: "Yarn Stock [Yarn Base]"),
     datamodel(images: "user.svg", title: "Gray Stock - 1"),
@@ -38,6 +52,26 @@ class dataController extends ChangeNotifier {
     datamodel(images: "user.svg", title: "Weaver Wise Roll Stock - 2"),
     datamodel(images: "user.svg", title: "Weaver Wise Pipe Stock - 2"),
   ];
+  List<Company> filteredCompanyDetails = [];
+
+  List<Company> companyDetails = [
+    Company(
+        address:
+            "Akshya Nagar 1st Block 1st Cross, Rammurthy nagar, Bangalore-560016",
+        title: "Varni Infotech",
+        balance: "₹26,548,23.00"),
+    Company(
+        address:
+            "Akshya Nagar 1st Block 1st Cross, Rammurthy nagar, Bangalore-560016",
+        title: " Infotech",
+        balance: "₹26,548,23.00"),
+    Company(
+        address:
+            "Akshya Nagar 1st Block 1st Cross, Rammurthy nagar, Bangalore-560016",
+        title: "Varni",
+        balance: "₹26,548,23.00"),
+  ];
+
   List<Balance> balancelist = [
     Balance(
         title: "Varni Infotech", balance: "69,000.00", images: "call_ic.svg"),
@@ -46,21 +80,40 @@ class dataController extends ChangeNotifier {
   ];
 
   var searchText = ''.obs;
+
   var invoices = [
     {
       "billNo": "27",
       "date": "05-07-24",
       "fix": "45",
       "due": "77",
-      "amount": "₹6,122.00"
+      "amount": "₹6,122.00",
+      "chack": false,
     },
     {
       "billNo": "318",
       "date": "28-07-24",
       "fix": "30",
       "due": "36",
-      "amount": "₹7,293.00"
-    }
+      "amount": "₹7,293.00",
+      "chack": false,
+    },
+    {
+      "billNo": "26",
+      "date": "28-07-24",
+      "fix": "30",
+      "due": "36",
+      "amount": "₹7,293.00",
+      "chack": false,
+    },
+    {
+      "billNo": "317",
+      "date": "28-07-24",
+      "fix": "30",
+      "due": "36",
+      "amount": "₹7,293.00",
+      "chack": false,
+    },
   ].obs;
   var biles = [
     {
@@ -91,12 +144,8 @@ class dataController extends ChangeNotifier {
   var billType = 'All'.obs;
   var sortBy = 'Party Asc'.obs;
   var searchQuery = ''.obs;
+  TextEditingController searchController = TextEditingController();
 
-  void updateSearchQuery(String value) {
-    searchQuery.value = value;
-  }
-
-  List<bool> isChecked = [false, false];
   bool isChecked1 = false;
 
   var startDate = DateTime(2024, 8, 5).obs;

@@ -4,109 +4,121 @@ import 'package:get/get.dart';
 import 'package:textile_app/Screens/InvoiseList/invoice_list_screen.dart';
 import 'package:textile_app/controller/data_controller.dart';
 import 'package:textile_app/utils/widget.dart';
+import 'package:textile_app/widget/appbar.dart';
+import 'package:textile_app/widget/search_bar.dart';
 
-class ReportReciveScreen extends StatelessWidget {
+class ReportReciveScreen extends StatefulWidget {
   final String title;
+  final String startDate;
+  final String endDate;
+
+  ReportReciveScreen(
+      {super.key,
+      required this.title,
+      required this.startDate,
+      required this.endDate});
+
+  @override
+  State<ReportReciveScreen> createState() => _ReportReciveScreenState();
+}
+
+class _ReportReciveScreenState extends State<ReportReciveScreen> {
   final dataController controller = Get.put(dataController());
 
-  ReportReciveScreen({super.key, required this.title});
+  @override
+  void initState() {
+    super.initState();
+    controller.filteredCompanyDetails = controller.companyDetails;
+  }
+
+  filterSearchResults(String query) {
+    if (query.isEmpty) {
+      setState(() {
+        controller.filteredCompanyDetails = controller.companyDetails;
+      });
+    } else {
+      setState(() {
+        controller.filteredCompanyDetails =
+            controller.companyDetails.where((company) {
+          return company.title.toLowerCase().contains(query.toLowerCase()) ||
+              company.address.toLowerCase().contains(query.toLowerCase());
+        }).toList();
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              height: 60,
-              color: const Color(0xff0D5785),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Get.back();
-                      },
-                      child:
-                          getAssetWidget("back.svg", height: 26.h, width: 26.h),
-                    ),
-                    getCustomFont(
-                      title,
-                      textColor: Colors.white,
-                      textSize: 19.sp,
-                      fontWeight: FontWeight.w400,
-                    ),
-                    const SizedBox(),
-                  ],
-                ),
+    return Scaffold(
+      appBar: customAppbar(context, widget.title, false, null),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          verticalSpace(10.h),
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            color: Colors.grey[100],
+            width: double.infinity,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Obx(() => StatsItem(
+                        title: 'Receivable',
+                        value:
+                            '₹${controller.receivable.value.toStringAsFixed(2)}',
+                      )),
+                  StatsItem(
+                    title: 'Bill Type',
+                    value: controller.billType.value,
+                  ),
+                  StatsItem(
+                    title: 'Sort By',
+                    value: controller.sortBy.value,
+                  ),
+                ],
               ),
             ),
-
-            // Stats section
-            Column(
-              children: [
-                Container(
-                  color: Colors.grey[100],
-                  height: 60.h,
-                  width: double.infinity,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Obx(() => StatsItem(
-                              title: 'Receivable',
-                              value:
-                                  '₹${controller.receivable.value.toStringAsFixed(2)}',
-                            )),
-                        const StatsItem(
-                          title: 'Bill Type',
-                          value: 'All',
-                        ),
-                        const StatsItem(
-                          title: 'Sort By',
-                          value: 'Party Asc',
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                // const SizedBox(height: 16),
-                verticalSpace(10.h),
-                Padding(
-                  padding: const EdgeInsets.only(right: 8.0, left: 8.0),
-                  child: CustomSearchbar(
-                    'Search Account...',
-                    (value) => controller.updateSearchQuery(value),
-                  ),
-                ),
-                verticalSpace(10.h),
-                // const SizedBox(height: 16),
-                Padding(
-                  padding: const EdgeInsets.only(right: 8.0, left: 8.0),
+          ),
+          verticalSpace(10.h),
+          Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18),
+              child: CustomeSearchbar(
+                controller: controller.searchController,
+                onSearchChanged: (p0) =>
+                    filterSearchResults(controller.searchController.text),
+              )),
+          verticalSpace(10.h),
+          Expanded(
+            child: ListView.builder(
+              itemCount: controller.filteredCompanyDetails.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 18, vertical: 5),
                   child: GestureDetector(
                     onTap: () {
                       Get.to(InvoiceListScreen(
-                        title: title,
+                        title: widget.title,
+                        endDate: widget.endDate,
+                        startDate: widget.startDate,
                       ));
                     },
                     child: AccountCard(
-                      companyName: 'Varni Infotech',
-                      address:
-                          'Akshya Nagar 1st Block 1st Cross, Rammurthy nagar, Bangalore-560016',
-                      amount: '₹26,548,23.00',
+                      companyName:
+                          controller.filteredCompanyDetails[index].title,
+                      address: controller.filteredCompanyDetails[index].address,
+                      amount: controller.filteredCompanyDetails[index].balance,
                       onWhatsAppPressed: () {},
                       onCallPressed: () {},
                     ),
                   ),
-                ),
-              ],
-            )
-          ],
-        ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -154,15 +166,18 @@ class AccountCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 110.h,
+      padding: const EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
           border: Border.all(color: const Color(0xffC1C1C1)),
           borderRadius: BorderRadius.circular(12.r),
           color: Colors.white),
       child: Padding(
-        padding: const EdgeInsets.only(left: 15, right: 10, top: 5),
+        padding: const EdgeInsets.only(
+          left: 15,
+          right: 10,
+        ),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          // crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
               child: Column(
@@ -185,9 +200,10 @@ class AccountCard extends StatelessWidget {
             ),
             Column(
               children: [
-                verticalSpace(10),
                 getAssetWidget("wp_ic.svg"),
-                verticalSpace(10),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                ),
                 getAssetWidget("call_ic.svg"),
               ],
             ),

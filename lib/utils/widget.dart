@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
 import 'package:textile_app/utils/constant.dart';
 
 Widget getAssetWidget(String imageName,
@@ -43,54 +42,32 @@ Widget getCustomFont(String text,
   );
 }
 
-Widget appBar(String text, {void Function()? onTap}) {
-  return Container(
-    height: 60,
-    color: const Color(0xff0D5785),
-    child: Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          GestureDetector(
-            onTap: () {
-              // Get.back();
-            },
-            child: getAssetWidget("back.svg", height: 26.h, width: 26.h),
-          ),
-          // horizontalSpace(89.h),
-          getCustomFont(
-            text,
-            textColor: Colors.white,
-            textSize: 20.sp,
-            fontWeight: FontWeight.w400,
-          ),
-          const SizedBox(),
-        ],
-      ),
-    ),
-  );
-}
-
-Widget CustomSearchbar(String hintText, void Function(String)? onChanged) {
-  return Container(
-    decoration: BoxDecoration(
-      color: Colors.grey[100], // Background color
-      borderRadius: BorderRadius.circular(12), // Rounded corners
-    ),
-    child: TextField(
-      onChanged: onChanged,
-      decoration: InputDecoration(
-        hintText: hintText,
-        hintStyle: const TextStyle(color: Colors.grey),
-        // Hint text style
-        border: InputBorder.none,
-        // Remove the default border
-        contentPadding: const EdgeInsets.symmetric(vertical: 15),
-        // Padding inside the search bar
-        prefixIcon: const Icon(Icons.search, color: Colors.grey), // Search icon
-      ),
-    ),
-  );
-}
+// Widget appBar(String text, {void Function()? onTap}) {
+//   return Container(
+//     height: 60,
+//     color: const Color(0xff0D5785),
+//     child: Padding(
+//       padding: const EdgeInsets.all(8.0),
+//       child: Row(
+//         crossAxisAlignment: CrossAxisAlignment.center,
+//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//         children: [
+//           GestureDetector(
+//             onTap: () {
+//               // Get.back();
+//             },
+//             child: getAssetWidget("back.svg", height: 26.h, width: 26.h),
+//           ),
+//           // horizontalSpace(89.h),
+//           getCustomFont(
+//             text,
+//             textColor: Colors.white,
+//             textSize: 20.sp,
+//             fontWeight: FontWeight.w400,
+//           ),
+//           const SizedBox(),
+//         ],
+//       ),
+//     ),
+//   );
+// }

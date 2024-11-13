@@ -1,87 +1,69 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:textile_app/utils/widget.dart';
+import 'package:textile_app/widget/appbar.dart';
 
 class PurchaseAnalysisScreen extends StatelessWidget {
   const PurchaseAnalysisScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Column(
-          children: [
-            appBar("Purchase Analysis"),
-            Expanded(
-              child: ListView(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 10),
-                    child: Column(
-                      children: [
-                        // const Text(
-                        //   'Sales in Lac',
-                        //   style: TextStyle(
-                        //       color: Colors.red, fontWeight: FontWeight.bold),
-                        //   textAlign: TextAlign.center,
-                        // ),
-
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                                width: 16,
-                                height: 16,
-                                color: const Color(0xffFF3F66)),
-                            const SizedBox(width: 4),
-                            const Text('Sales in Lac',
-                                style: TextStyle(
-                                    fontSize: 11,
-                                    color: Color(0xff6F6F6E),
-                                    fontWeight: FontWeight.w500)),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 300,
-                          child: BarChartWidget(),
-                        ),
-                        const SizedBox(height: 16),
-                        const Text(
-                          'Top 10 Selling Items by Quality',
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.w500),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 16),
-                        const LegendWidget(),
-                        const SizedBox(
-                          height: 300,
-                          child: PieChartWidget(),
-                        ),
-                        const SizedBox(height: 16),
-                        const Text(
-                          'Top 10 Parties by Transactions',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w500),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 16),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(width: 12, height: 12, color: Colors.red),
-                            const SizedBox(width: 4),
-                            const Text('Sales in Lac'),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
+    return Scaffold(
+      appBar: customAppbar(context, "Purchase Analysis", false, null),
+      body: ListView(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                        width: 16, height: 16, color: const Color(0xffFF3F66)),
+                    const SizedBox(width: 4),
+                    const Text('Sales in Lac',
+                        style: TextStyle(
+                            fontSize: 11,
+                            color: Color(0xff6F6F6E),
+                            fontWeight: FontWeight.w500)),
+                  ],
+                ),
+                const SizedBox(
+                  height: 300,
+                  child: BarChartWidget(),
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  'Top 10 Selling Items by Quality',
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+                const LegendWidget(),
+                const SizedBox(
+                  height: 300,
+                  child: PieChartWidget(),
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  'Top 10 Parties by Transactions',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(width: 12, height: 12, color: Colors.red),
+                    const SizedBox(width: 4),
+                    const Text('Sales in Lac'),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

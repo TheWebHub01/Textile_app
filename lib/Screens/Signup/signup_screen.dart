@@ -143,6 +143,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:textile_app/Screens/Login/login_screen.dart';
 import 'package:textile_app/progress_loader/progress_loader.dart';
 import 'package:textile_app/utils/widget.dart';
 import 'package:textile_app/widget/custom_textfild.dart';
@@ -184,12 +185,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
             .set({
           'email': _emailController.text.trim(),
         });
+        await Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginScreen()),
+        );
 
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Sign-Up Successful.')),
         );
 
         // Navigate to the login tab or any other relevant tab
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginScreen()),
+        );
       } on FirebaseAuthException catch (e) {
         String errorMessage = '';
         if (e.code == 'email-already-in-use') {
@@ -239,16 +249,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     style: TextStyle(color: Color(0xff8A8A8A), fontSize: 17),
                   ),
                   verticalSpace(12.h),
-                  customTextformfield("Enter E-mail", "E-mail",
-                      "assets/svg/email.svg", _emailController, (value) {
+                  customTextformfield(
+                      "Enter E-mail", "E-mail", _emailController, (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your email';
                     }
                     return null;
                   }, TextInputType.emailAddress, false, null, null),
                   verticalSpace(10.h),
-                  customTextformfield("Enter Password", "Password",
-                      "assets/svg/password.svg", _passwordController, (value) {
+                  customTextformfield(
+                      "Enter Password", "Password", _passwordController,
+                      (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your password';
                     }
