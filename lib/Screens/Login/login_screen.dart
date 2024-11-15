@@ -68,8 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
           // Navigate to the home screen
           await Navigator.pushReplacement(
             context,
-            MaterialPageRoute(
-                builder: (context) => const PurchaseOutstanding()),
+            MaterialPageRoute(builder: (context) => const CompanysNameScreen()),
           );
 
           ScaffoldMessenger.of(context).showSnackBar(
@@ -163,7 +162,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        const ForgotScreen()));
+                                        const ForgotPasswordScreen()));
                           },
                           child: const Text(
                             'Forgot Password?',
@@ -276,7 +275,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        const PurchaseOutstanding()),
+                                        const CompanysNameScreen()),
                               );
                             } else {
                               print('Login failed');

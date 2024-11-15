@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:textile_app/Screens/Home/home_screen.dart';
 import 'package:textile_app/Screens/Login/login_screen.dart';
+import 'package:textile_app/Screens/companys_name.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -23,12 +23,12 @@ class _SplashScreenState extends State<SplashScreen> {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       Future.delayed(
-        const Duration(seconds: 3),
+        const Duration(seconds: 5),
         () {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => const PurchaseOutstanding(),
+                builder: (context) => const CompanysNameScreen(),
               ));
         },
       );
@@ -51,12 +51,14 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          Container(
-            height: double.infinity,
+          SizedBox(
             width: double.infinity,
-            color: const Color(0xff0D5785),
+            height: double.infinity,
+            child: SvgPicture.asset(
+              "assets/svg/bg.svg",
+              fit: BoxFit.cover,
+            ),
           ),
-          SvgPicture.asset("assets/svg/bg.svg"),
           Center(child: SvgPicture.asset("assets/svg/splash_logo.svg")),
         ],
       ),

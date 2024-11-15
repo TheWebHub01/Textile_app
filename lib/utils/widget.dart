@@ -41,33 +41,3 @@ Widget getCustomFont(String text,
     maxLines: maxline,
   );
 }
-
-// Widget appBar(String text, {void Function()? onTap}) {
-//   return Container(
-//     height: 60,
-//     color: const Color(0xff0D5785),
-//     child: Padding(
-//       padding: const EdgeInsets.all(8.0),
-//       child: Row(
-//         crossAxisAlignment: CrossAxisAlignment.center,
-//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//         children: [
-//           GestureDetector(
-//             onTap: () {
-//               // Get.back();
-//             },
-//             child: getAssetWidget("back.svg", height: 26.h, width: 26.h),
-//           ),
-//           // horizontalSpace(89.h),
-//           getCustomFont(
-//             text,
-//             textColor: Colors.white,
-//             textSize: 20.sp,
-//             fontWeight: FontWeight.w400,
-//           ),
-//           const SizedBox(),
-//         ],
-//       ),
-//     ),
-//   );
-// }

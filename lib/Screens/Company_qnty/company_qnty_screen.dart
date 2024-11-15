@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:textile_app/Screens/Calculate/calculate_screen.dart';
 import 'package:textile_app/controller/data_controller.dart';
 import 'package:textile_app/utils/widget.dart';
+import 'package:textile_app/widget/appbar.dart';
 import 'package:textile_app/widget/search_bar.dart';
 
 class CompanyQntyScreen extends StatefulWidget {
-  const CompanyQntyScreen({super.key});
+  final String startDate;
+  final String endDate;
+  const CompanyQntyScreen(
+      {super.key, required this.startDate, required this.endDate});
 
   @override
   State<CompanyQntyScreen> createState() => _CompanyQntyScreenState();
@@ -18,153 +23,126 @@ class _CompanyQntyScreenState extends State<CompanyQntyScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Column(
-          children: [
-            Container(
-              height: 60,
-              color: const Color(0xff0D5785),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GestureDetector(
-                      onTap: () {},
-                      child:
-                          getAssetWidget("back.svg", height: 26.h, width: 26.h),
-                    ),
-                    getCustomFont(
-                      "Munjapara Fabrics",
-                      textColor: Colors.white,
-                      textSize: 19.sp,
-                      fontWeight: FontWeight.w400,
-                    ),
-                    const SizedBox(),
-                  ],
-                ),
-              ),
-            ),
-            verticalSpace(20.h),
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      getCustomFont("This Week",
-                          textColor: const Color(0xff222222),
-                          fontWeight: FontWeight.w500),
-                      Obx(
-                        () {
-                          return Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              getCustomFont(
-                                controller.startDate.value
-                                    .toString()
-                                    .split(' ')[0],
-                                fontWeight: FontWeight.w500,
-                                textSize: 14.sp,
-                                textColor: const Color(0xff222222),
-                              ),
-                              horizontalSpace(10.w),
-                              getCustomFont(
-                                "to",
-                                fontWeight: FontWeight.w500,
-                                textSize: 12.sp,
-                                textColor: const Color(0xff222222),
-                              ),
-                              horizontalSpace(10.w),
-                              getCustomFont(
-                                controller.endDate.value
-                                    .toString()
-                                    .split(' ')[0],
-                                fontWeight: FontWeight.w500,
-                                textSize: 14.sp,
-                                textColor: const Color(0xff222222),
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Column(
-                        children: [
-                          getCustomFont("Total Nos",
-                              fontWeight: FontWeight.w400,
-                              textColor: const Color(0xff686868),
-                              textSize: 12.sp),
-                          getCustomFont("0.00",
-                              fontWeight: FontWeight.w500,
-                              textColor: const Color(0xff222222),
-                              textSize: 15.sp),
-                          // Text("0.00"),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          getCustomFont("Total Qnty",
-                              fontWeight: FontWeight.w400,
-                              textColor: const Color(0xff686868),
-                              textSize: 12.sp),
-                          getCustomFont("0.00",
-                              fontWeight: FontWeight.w500,
-                              textColor: const Color(0xff222222),
-                              textSize: 15.sp),
-                        ],
-                      ),
-                      const Column(
-                        children: [],
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: CustomeSearchbar(
-                  controller: searchController,
-                  onSearchChanged: (p0) {},
-                )),
-            Container(
-              height: 40,
-              color: const Color(0xff0D5785),
+    return Scaffold(
+      appBar: customAppbar(context, "Munjapara Fabrics", false, null),
+      body: Column(
+        children: [
+          verticalSpace(10.h),
+          Container(
+            color: Colors.grey.shade100,
+            height: 100.h,
+            width: double.infinity,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8.0, right: 8.0),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  getCustomFont("BK",
-                      fontWeight: FontWeight.w600,
-                      textColor: const Color(0xffffffff),
-                      textSize: 15.sp),
-                  getCustomFont("Chn No",
-                      fontWeight: FontWeight.w600,
-                      textColor: const Color(0xffffffff),
-                      textSize: 15.sp),
-                  getCustomFont("Date",
-                      fontWeight: FontWeight.w600,
-                      textColor: const Color(0xffffffff),
-                      textSize: 15.sp),
-                  getCustomFont("Qnty",
-                      fontWeight: FontWeight.w600,
-                      textColor: const Color(0xffffffff),
-                      textSize: 15.sp),
-                  getCustomFont("Nos",
-                      fontWeight: FontWeight.w600,
-                      textColor: const Color(0xffffffff),
-                      textSize: 15.sp),
+                  const StatsItem(
+                    sub: "This Month",
+                    title: 'Total Nos',
+                    value: '0.00',
+                  ),
+                  StatsItem(
+                    sub: widget.startDate,
+                    title: 'Total Qnty',
+                    value: '0.00',
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(top: 14),
+                    child: Text("to"),
+                  ),
+                  StatsItem(
+                    sub: widget.endDate,
+                    title: '',
+                    value: '',
+                  ),
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+          Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+              child: CustomeSearchbar(
+                controller: searchController,
+                onSearchChanged: (p0) {},
+              )),
+          Table(
+            columnWidths: const {
+              0: FlexColumnWidth(1),
+              1: FlexColumnWidth(1),
+              2: FlexColumnWidth(1),
+              3: FlexColumnWidth(1),
+              4: FlexColumnWidth(1),
+            },
+            children: const [
+              TableRow(
+                decoration: BoxDecoration(color: Color(0xff0D5785)),
+                children: [
+                  SizedBox(
+                    height: 35,
+                    child: Center(
+                      child: Text(
+                        "BK",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 35,
+                    child: Center(
+                      child: Text("Bill No",
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          )),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 35,
+                    child: Center(
+                      child: Text(
+                        "Date",
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 35,
+                    child: Center(
+                      child: Text("Qnty",
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          )),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 35,
+                    child: Center(
+                      child: Text(
+                        "Nos",
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

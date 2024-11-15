@@ -53,6 +53,8 @@ class dataController extends ChangeNotifier {
     datamodel(images: "user.svg", title: "Weaver Wise Pipe Stock - 2"),
   ];
   List<Company> filteredCompanyDetails = [];
+  List<Balance> filteredBalanceDetails = [];
+  List<datamodel> filteredCallDetails = [];
 
   List<Company> companyDetails = [
     Company(
@@ -117,7 +119,7 @@ class dataController extends ChangeNotifier {
   ].obs;
   var biles = [
     {
-      "billNo": "Text 1",
+      "billNo": "Text 3",
       "date": "0",
       "fix": "0",
       "due": "0",
@@ -129,11 +131,11 @@ class dataController extends ChangeNotifier {
       "due": "0",
     },
     {
-      "billNo": "Text 3",
+      "billNo": "Text 1",
       "date": "0",
       "fix": "0",
       "due": "0",
-    }
+    },
   ].obs;
 
   void searchInvoice(String value) {
@@ -178,11 +180,12 @@ class dataController extends ChangeNotifier {
       "Sale Rate": "0",
       "Group": "",
       "Unit": "KGS",
-      "HSN": "540710",
+      "HSN": "560710",
     }
   ].obs;
 
   List<datamodel> callList = [
-    datamodel(title: "Varni Infotech", images: "1234567890")
+    datamodel(title: "Varni Infotech", images: "1234567890"),
+    datamodel(title: "Sky Infotech", images: "8847896522")
   ];
 }

@@ -12,7 +12,7 @@ class ReportReciveScreen extends StatefulWidget {
   final String startDate;
   final String endDate;
 
-  ReportReciveScreen(
+  const ReportReciveScreen(
       {super.key,
       required this.title,
       required this.startDate,

@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:textile_app/controller/data_controller.dart';
 import 'package:textile_app/utils/widget.dart';
+import 'package:textile_app/widget/appbar.dart';
+import 'package:textile_app/widget/custom_item.dart';
 import 'package:textile_app/widget/search_bar.dart';
 
 class CompanyDetailsScreen extends StatefulWidget {
@@ -16,49 +18,49 @@ class _CompanyDetailsScreenState extends State<CompanyDetailsScreen> {
   dataController controller = Get.put(dataController());
   TextEditingController searchController = TextEditingController();
 
+  filterSearchResults(String query) {
+    if (query.isEmpty) {
+      setState(() {
+        controller.filteredBalanceDetails = controller.balancelist;
+      });
+    } else {
+      setState(() {
+        controller.filteredBalanceDetails =
+            controller.balancelist.where((Balance) {
+          return Balance.title.toLowerCase().contains(query.toLowerCase()) ||
+              Balance.balance.toLowerCase().contains(query.toLowerCase());
+        }).toList();
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    controller.filteredBalanceDetails = controller.balancelist;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
-      body: Column(
-        children: [
-          Container(
-            height: 60,
-            color: const Color(0xff0D5785),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  GestureDetector(
-                    onTap: () {},
-                    child:
-                        getAssetWidget("back.svg", height: 26.h, width: 26.h),
-                  ),
-                  getCustomFont(
-                    "Munjapara Fabrics(03)",
-                    textColor: Colors.white,
-                    textSize: 19.sp,
-                    fontWeight: FontWeight.w400,
-                  ),
-                  const SizedBox(),
-                ],
-              ),
+    return Scaffold(
+      appBar: customAppbar(context, "Munjapara Fabrics(03)", false, null),
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12),
+        child: Column(
+          children: [
+            CustomeSearchbar(
+              controller: searchController,
+              onSearchChanged: (p0) =>
+                  filterSearchResults(searchController.text),
             ),
-          ),
-          Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: CustomeSearchbar(
-                controller: searchController,
-                onSearchChanged: (p0) {},
-              )),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
+            verticalSpace(10.h),
+            Container(
               decoration: BoxDecoration(
                   border: Border.all(color: const Color(0xffC1C1C1)),
                   borderRadius: BorderRadius.circular(12)),
-              child: AccountCard(
+              child: AccountCardDetails(
                 companyName: 'Varni Infotech',
                 address:
                     'Akshya Nagar 1st Block 1st Cross,\nRammurthy nagar, Bangalore-560016',
@@ -70,51 +72,30 @@ class _CompanyDetailsScreenState extends State<CompanyDetailsScreen> {
                 number: '25DCE*********I',
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              height: 72.h,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                  border: Border.all(color: const Color(0xffC1C1C1)),
-                  borderRadius: BorderRadius.circular(10.r)),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        getCustomFont("Varni Infotech",
-                            textColor: const Color(0xff0D5785),
-                            textSize: 15.sp,
-                            fontWeight: FontWeight.w600),
-                        Row(
-                          children: [
-                            getAssetWidget("rs.svg", color: Colors.black),
-                            getCustomFont("69,000.00",
-                                textSize: 15.sp, fontWeight: FontWeight.w500),
-                          ],
-                        ),
-                      ],
+            verticalSpace(10.h),
+            Expanded(
+              child: ListView.builder(
+                itemCount: controller.filteredBalanceDetails.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: customItem(
+                      controller.filteredBalanceDetails[index].title,
+                      controller.filteredBalanceDetails[index].balance,
+                      "menu_ic.svg",
                     ),
-                    getAssetWidget("menu_ic.svg"),
-                  ],
-                ),
+                  );
+                },
               ),
-            ),
-          ),
-        ],
+            )
+          ],
+        ),
       ),
-    ));
+    );
   }
 }
 
-class AccountCard extends StatelessWidget {
+class AccountCardDetails extends StatelessWidget {
   final String companyName;
   final String address;
   final String amount;
@@ -124,7 +105,7 @@ class AccountCard extends StatelessWidget {
   final VoidCallback onWhatsAppPressed;
   final VoidCallback onCallPressed;
 
-  const AccountCard({
+  const AccountCardDetails({
     super.key,
     required this.companyName,
     required this.address,
@@ -138,84 +119,119 @@ class AccountCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 150.h,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        getCustomFont(companyName,
-                            textColor: const Color(0xff0D5785),
-                            textSize: 15.sp,
-                            fontWeight: FontWeight.w600),
-                        GestureDetector(
-                            onTap: () {}, child: getAssetWidget("menu_ic.svg"))
-                      ]),
-                  getCustomFont(address,
-                      textColor: const Color(0xff686868),
-                      textSize: 12.sp,
-                      fontWeight: FontWeight.w400),
-                  getCustomFont(number,
-                      textColor: const Color(0xff686868),
-                      textSize: 12.sp,
-                      fontWeight: FontWeight.w400),
-                  Row(
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+      child: Stack(alignment: Alignment.topRight, children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            getCustomFont(
+              companyName,
+              textColor: const Color(0xff0D5785),
+              textSize: 15.sp,
+              fontWeight: FontWeight.w600,
+            ),
+            getCustomFont(
+              address,
+              textColor: const Color(0xff686868),
+              textSize: 12.sp,
+            ),
+            getCustomFont(
+              number,
+              textColor: const Color(0xff686868),
+              textSize: 12.sp,
+            ),
+            Row(
+              children: [
+                getCustomFont(
+                  "Broker :",
+                  textColor: const Color(0xff686868),
+                  textSize: 12.sp,
+                ),
+                getCustomFont(
+                  broker,
+                  textColor: const Color(0xff686868),
+                  textSize: 13.sp,
+                ),
+              ],
+            ),
+            getCustomFont(
+              amount,
+              textColor: const Color(0xff222222),
+              textSize: 15.sp,
+            ),
+          ],
+        ),
+        GestureDetector(
+          onTapDown: (TapDownDetails details) async {
+            final RenderBox overlay =
+                Overlay.of(context).context.findRenderObject() as RenderBox;
+
+            await showMenu(
+              color: Colors.white,
+              context: context,
+              position: RelativeRect.fromRect(
+                details.globalPosition & const Size(55, 55),
+                Offset.zero & overlay.size,
+              ),
+              items: [
+                PopupMenuItem(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      getCustomFont("Broker :",
-                          textColor: const Color(0xff686868),
-                          textSize: 12.sp,
-                          fontWeight: FontWeight.w400),
-                      getCustomFont(broker,
-                          textColor: const Color(0xff686868),
-                          textSize: 13.sp,
-                          fontWeight: FontWeight.w500),
+                      IconButton(
+                        icon: getAssetWidget(
+                          "wp_ic.svg",
+                          height: 35,
+                          width: 35,
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context); // Close menu
+                          // Add your logic here
+                        },
+                      ),
+                      IconButton(
+                        icon: getAssetWidget(
+                          "call_ic.svg",
+                          height: 35,
+                          width: 35,
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context); // Close menu
+                          // Add your logic here
+                        },
+                      ),
+                      IconButton(
+                        icon: getAssetWidget(
+                          "forward ic.svg",
+                          height: 35,
+                          width: 35,
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context); // Close menu
+                          // Add your logic here
+                        },
+                      ),
+                      IconButton(
+                        icon: getAssetWidget(
+                          "location ic.svg",
+                          height: 35,
+                          width: 35,
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context); // Close menu
+                          // Add your logic here
+                        },
+                      ),
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          getCustomFont("total Price",
-                              textColor: const Color(0xff686868),
-                              textSize: 12.sp,
-                              fontWeight: FontWeight.w400),
-                          getCustomFont(amount,
-                              textColor: const Color(0xff222222),
-                              textSize: 15.sp,
-                              fontWeight: FontWeight.w500),
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          getCustomFont("Last Payment Date",
-                              textColor: const Color(0xff686868),
-                              textSize: 12.sp,
-                              fontWeight: FontWeight.w400),
-                          getCustomFont(date,
-                              textColor: const Color(0xff222222),
-                              textSize: 15.sp,
-                              fontWeight: FontWeight.w500),
-                        ],
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
+                ),
+              ],
+            );
+          },
+          child: getAssetWidget("menu_ic.svg"),
+        ),
+      ]),
     );
   }
 }

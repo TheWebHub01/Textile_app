@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:textile_app/Screens/Report/report_screen.dart';
 import 'package:textile_app/controller/data_controller.dart';
 import 'package:textile_app/utils/widget.dart';
 
 class PurchaseOutstanding extends StatefulWidget {
-  const PurchaseOutstanding({super.key});
+  final String title;
+  const PurchaseOutstanding({super.key, required this.title});
 
   @override
   State<PurchaseOutstanding> createState() => _PurchaseOutstandingState();
@@ -23,20 +26,23 @@ class _PurchaseOutstandingState extends State<PurchaseOutstanding> {
       appBar: AppBar(
         backgroundColor: const Color(0xFF0D5785),
         leading: TextButton(
-          onPressed: () {},
+          onPressed: () {
+            Get.back();
+          },
           child: SvgPicture.asset(
             "assets/svg/back.svg",
           ),
         ),
         centerTitle: true,
-        title: const Text(
-          "TheWebHub",
-          style: TextStyle(fontSize: 20, color: Colors.white),
+        title: Text(
+          widget.title,
+          style: const TextStyle(fontSize: 20, color: Colors.white),
         ),
       ),
       body: Column(
         children: [
           Container(
+            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 15.w),
             decoration: BoxDecoration(
               color: const Color(0xff0D5785),
               borderRadius: BorderRadius.only(
@@ -48,12 +54,12 @@ class _PurchaseOutstandingState extends State<PurchaseOutstanding> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    getCustomFont("Last Synced:           ",
+                    getCustomFont("Last Synced:   ",
                         textColor: const Color(0xffffffff), textSize: 18.sp),
                     getCustomFont(formattedDate,
                         textColor: const Color(0xffffffff), textSize: 16.sp),
-                    SizedBox(width: 10.w)
                   ],
                 ),
                 verticalSpace(10.h),
@@ -61,8 +67,8 @@ class _PurchaseOutstandingState extends State<PurchaseOutstanding> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Container(
-                      height: 75.h,
-                      width: 180.w,
+                      padding: EdgeInsets.symmetric(
+                          vertical: 14.h, horizontal: 45.w),
                       decoration: BoxDecoration(
                           color: const Color(0xffffffff).withOpacity(0.1),
                           borderRadius:
@@ -89,9 +95,10 @@ class _PurchaseOutstandingState extends State<PurchaseOutstanding> {
                         ],
                       ),
                     ),
+                    horizontalSpace(10.h),
                     Container(
-                      height: 75.h,
-                      width: 158.w,
+                      padding: EdgeInsets.symmetric(
+                          vertical: 14.h, horizontal: 45.w),
                       decoration: BoxDecoration(
                           color: const Color(0xffffffff).withOpacity(0.1),
                           borderRadius:
@@ -122,8 +129,8 @@ class _PurchaseOutstandingState extends State<PurchaseOutstanding> {
                 ),
                 verticalSpace(9.h),
                 Container(
-                  height: 45,
-                  width: 350.w,
+                  padding:
+                      EdgeInsets.symmetric(vertical: 15.h, horizontal: 20.h),
                   decoration: BoxDecoration(
                       color: const Color(0xffffffff).withOpacity(0.1),
                       borderRadius:
@@ -147,23 +154,34 @@ class _PurchaseOutstandingState extends State<PurchaseOutstanding> {
                     ],
                   ),
                 ),
-                verticalSpace(20.h),
               ],
             ),
           ),
           Expanded(
-            child: GridView.builder(
-              itemCount: controller.imagelist.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  mainAxisExtent: 140.h, crossAxisCount: 2),
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: CustomItem(
-                      imageName: controller.imagelist[index].images!,
-                      title: controller.imagelist[index].title),
-                );
-              },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: GridView.builder(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                itemCount: controller.imagelist.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    mainAxisSpacing: 10.0, // Vertical spacing between items
+                    crossAxisSpacing: 10.0,
+                    childAspectRatio: 1.3,
+                    crossAxisCount: 2),
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {
+                      Get.to(ReportScreen(
+                        title: controller.companyList[index].title,
+                      ));
+                    },
+                    child: customItem(
+                        imageName: controller.imagelist[index].images!,
+                        title: controller.imagelist[index].title),
+                  );
+                },
+              ),
             ),
           )
         ],
@@ -171,7 +189,7 @@ class _PurchaseOutstandingState extends State<PurchaseOutstanding> {
     );
   }
 
-  Widget CustomItem({
+  Widget customItem({
     required String imageName,
     required String title,
   }) {
@@ -187,19 +205,26 @@ class _PurchaseOutstandingState extends State<PurchaseOutstanding> {
       child: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 8.0, top: 8.0),
+            padding: const EdgeInsets.all(12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 getAssetWidget(imageName),
                 getCustomFont(title),
               ],
             ),
           ),
-          Positioned(
-            bottom: 10, // Specify the position
-            right: 10,
-            child: getAssetWidget("arrow.svg"),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                const Padding(padding: EdgeInsets.all(50)),
+                getAssetWidget("arrow.svg"),
+              ],
+            ),
           ),
         ],
       ),

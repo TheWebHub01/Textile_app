@@ -52,13 +52,12 @@ class _InvoiceListScreenState extends State<InvoiceListScreen> {
     }
   }
 
-  var filteredInvoices = [].obs; // Observable list for filtered invoices
+  var filteredInvoices = [].obs;
 
   TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     filteredInvoices.value = controller.invoices;
   }

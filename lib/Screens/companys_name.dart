@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:textile_app/Screens/Report/report_screen.dart';
+import 'package:textile_app/Screens/Home/home_screen.dart';
 import 'package:textile_app/controller/data_controller.dart';
 import 'package:textile_app/progress_loader/progress_loader.dart';
 import 'package:textile_app/utils/widget.dart';
@@ -69,7 +69,7 @@ class _CompanysNameScreenState extends State<CompanysNameScreen> {
                       left: 10, right: 10, bottom: 5, top: 10),
                   child: GestureDetector(
                     onTap: () {
-                      Get.to(ReportScreen(
+                      Get.to(PurchaseOutstanding(
                         title: controller.companyList[index].title,
                       ));
                     },

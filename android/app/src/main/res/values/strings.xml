@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Textile App</string>
+
+    <string name="facebook_app_id">1471745693429286</string>
+    <string name="fb_login_protocol_scheme">Smitk@123</string>
+    <string name="facebook_client_token">34e21ed1d5d2d6e9306308d66b665b0f</string>
+</resources>

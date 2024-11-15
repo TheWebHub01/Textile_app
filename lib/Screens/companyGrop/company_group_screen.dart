@@ -1,24 +1,9 @@
-// import 'package:flutter/cupertino.dart';
-// import 'package:flutter/material.dart';
-//
-// class CompanyGroupScreen extends StatefulWidget {
-//   const CompanyGroupScreen({super.key});
-//
-//   @override
-//   State<CompanyGroupScreen> createState() => _CompanyGroupScreenState();
-// }
-//
-// class _CompanyGroupScreenState extends State<CompanyGroupScreen> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return SafeArea(child: Scaffold(body: Column(),));
-//   }
-// }
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:textile_app/controller/data_controller.dart';
 import 'package:textile_app/utils/widget.dart';
+import 'package:textile_app/widget/appbar.dart';
 import 'package:textile_app/widget/search_bar.dart';
 
 class CompanyGroupScreen extends StatefulWidget {
@@ -30,170 +15,66 @@ class CompanyGroupScreen extends StatefulWidget {
 
 class _CompanyGroupScreenState extends State<CompanyGroupScreen> {
   dataController controller = Get.put(dataController());
+  void filterSearchResults(String query) {
+    if (query.isEmpty) {
+      setState(() {
+        filteredCompanyDetails.value = controller.companyDetailsList;
+      });
+    } else {
+      setState(() {
+        filteredCompanyDetails.value =
+            controller.companyDetailsList.where((companyDetailsList) {
+          return (companyDetailsList['title'] as String)
+                  .toLowerCase()
+                  .contains(query.toLowerCase()) ||
+              (companyDetailsList['Pur Rate'] as String)
+                  .toLowerCase()
+                  .contains(query.toLowerCase()) ||
+              (companyDetailsList['Sale Rate'] as String)
+                  .toLowerCase()
+                  .contains(query.toLowerCase()) ||
+              (companyDetailsList['Unit'] as String)
+                  .toLowerCase()
+                  .contains(query.toLowerCase()) ||
+              (companyDetailsList['HSN'] as String)
+                  .toLowerCase()
+                  .contains(query.toLowerCase());
+        }).toList();
+      });
+    }
+  }
+
+  var filteredCompanyDetails = [].obs;
   TextEditingController searchController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    filteredCompanyDetails.value = controller.companyDetailsList;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   leading: IconButton(
-      //     icon: Icon(Icons.arrow_back),
-      //     onPressed: () {
-      //       // Handle back button
-      //       Navigator.pop(context);
-      //     },
-      //   ),
-      //   title: Text('Munjapara Fabrics (03)'),
-      //   backgroundColor: Color(0xFF0A6C9C), // Custom color similar to the image
-      // ),
+      appBar: customAppbar(context, "Munjapara Fabrics (03)", false, null),
       body: Column(
         children: [
-          Container(
-            height: 60,
-            color: const Color(0xff0D5785),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  GestureDetector(
-                    onTap: () {},
-                    child:
-                        getAssetWidget("back.svg", height: 26.h, width: 26.h),
-                  ),
-                  getCustomFont(
-                    "Munjapara Fabrics(03)",
-                    textColor: Colors.white,
-                    textSize: 19.sp,
-                    fontWeight: FontWeight.w400,
-                  ),
-                  const SizedBox(),
-                ],
-              ),
+          Padding(
+            padding: EdgeInsets.only(top: 10, left: 12.w, right: 12.w),
+            child: CustomeSearchbar(
+              controller: searchController,
+              onSearchChanged: (p0) =>
+                  filterSearchResults(searchController.text),
             ),
           ),
-          CustomeSearchbar(
-            controller: searchController,
-            onSearchChanged: (p0) {},
-          ),
-          // Search Field
-          // Padding(
-          //   padding: const EdgeInsets.all(10.0),
-          //   child: TextField(
-          //     decoration: InputDecoration(
-          //       prefixIcon: Icon(Icons.search),
-          //       hintText: 'Search Account...',
-          //       filled: true,
-          //       fillColor: Colors.grey[200],
-          //       border: OutlineInputBorder(
-          //         borderRadius: BorderRadius.circular(20.0),
-          //         borderSide: BorderSide.none,
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          // Expanded(
-          //   child: ListView(
-          //     padding: EdgeInsets.all(10.0),
-          //     children: [
-          //       // Account Card 1
-          //       Container(
-          //           height: 75.h,
-          //           decoration: BoxDecoration(
-          //               borderRadius: BorderRadius.circular(10),
-          //               border: Border.all(color: Color(0xffC1C1C1))),
-          //           child: Row(
-          //             children: [
-          //               Column(
-          //                 mainAxisAlignment: MainAxisAlignment.center,
-          //                 // crossAxisAlignment: CrossAxisAlignment.center,
-          //                 children: [getCustomFont("Varni Infotech")],
-          //               ),
-          //             ],
-          //           )
-          //
-          //           // Padding(
-          //           //   padding: const EdgeInsets.all(10.0),
-          //           //   child: Column(
-          //           //     crossAxisAlignment: CrossAxisAlignment.start,
-          //           //     children: [
-          //           //       Text(
-          //           //         'Varni Infotech',
-          //           //         style: TextStyle(
-          //           //           fontWeight: FontWeight.bold,
-          //           //           color: Color(0xFF0A6C9C),
-          //           //           fontSize: 18.0,
-          //           //         ),
-          //           //       ),
-          //           //       SizedBox(height: 5.0),
-          //           //       Text('Pur Rate : 0 | Sale Rate : 0'),
-          //           //       SizedBox(height: 5.0),
-          //           //       Row(
-          //           //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //           //         children: [
-          //           //           Text('Group :'),
-          //           //           Column(
-          //           //             crossAxisAlignment: CrossAxisAlignment.end,
-          //           //             children: [
-          //           //               Text('HSN: 540710'),
-          //           //               Text('Unit : KGS'),
-          //           //             ],
-          //           //           ),
-          //           //         ],
-          //           //       ),
-          //           //     ],
-          //           //   ),
-          //           // ),
-          //           ),
-          //       // Account Card 2
-          //       Container(
-          //         decoration: BoxDecoration(
-          //             borderRadius: BorderRadius.circular(10),
-          //             border: Border.all(color: Color(0xffC1C1C1))),
-          //         child: const Padding(
-          //           padding: EdgeInsets.all(10.0),
-          //           child: Column(
-          //             crossAxisAlignment: CrossAxisAlignment.start,
-          //             children: [
-          //               Text(
-          //                 'Sky Infotech',
-          //                 style: TextStyle(
-          //                   fontWeight: FontWeight.bold,
-          //                   color: Color(0xFF0A6C9C),
-          //                   fontSize: 18.0,
-          //                 ),
-          //               ),
-          //               SizedBox(height: 5.0),
-          //               Text('Pur Rate : 0 | Sale Rate : 0'),
-          //               SizedBox(height: 5.0),
-          //               Row(
-          //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //                 children: [
-          //                   Text('Group :'),
-          //                   Column(
-          //                     crossAxisAlignment: CrossAxisAlignment.end,
-          //                     children: [
-          //                       Text('HSN: 540710'),
-          //                       Text('Unit : KGS'),
-          //                     ],
-          //                   ),
-          //                 ],
-          //               ),
-          //             ],
-          //           ),
-          //         ),
-          //       ),
-          //     ],
-          //   ),
-          // ),
           Obx(
             () => Expanded(
               child: ListView.builder(
-                itemCount: controller.companyDetailsList.length,
+                itemCount: filteredCompanyDetails.length,
                 itemBuilder: (context, index) {
-                  var invoice = controller.companyDetailsList[index];
+                  var invoice = filteredCompanyDetails[index];
                   return Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.w),
                     child: Container(
                       height: 80.h,
                       decoration: BoxDecoration(
@@ -211,20 +92,21 @@ class _CompanyGroupScreenState extends State<CompanyGroupScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                getCustomFont(invoice['title']!,
-                                    textColor: const Color(0xff0D5785),
-                                    textSize: 15.sp,
-                                    fontWeight: FontWeight.w600),
                                 getCustomFont(
-                                    "Pur Rate : ${invoice['Pur Rate']!} | Sale Rate : ${invoice['Sale Rate']}",
-                                    textColor: const Color(0xff686868),
-                                    textSize: 14.sp,
-                                    fontWeight: FontWeight.w400),
-                                getCustomFont("Group : ${invoice['Group']!}",
-                                    textColor: const Color(0xff686868),
-                                    textSize: 14.sp,
-                                    fontWeight: FontWeight.w400),
-                                // getCustomFont(invoice['title']!),
+                                  invoice['title']!,
+                                  textColor: const Color(0xff0D5785),
+                                  textSize: 15.sp,
+                                ),
+                                getCustomFont(
+                                  "Pur Rate : ${invoice['Pur Rate']!} | Sale Rate : ${invoice['Sale Rate']}",
+                                  textColor: const Color(0xff686868),
+                                  textSize: 14.sp,
+                                ),
+                                getCustomFont(
+                                  "Group : ${invoice['Group']!}",
+                                  textColor: const Color(0xff686868),
+                                  textSize: 14.sp,
+                                ),
                               ],
                             ),
                             Column(
@@ -240,12 +122,7 @@ class _CompanyGroupScreenState extends State<CompanyGroupScreen> {
                                     textSize: 14.sp,
                                     fontWeight: FontWeight.w400),
                               ],
-                            )
-                            // Text(invoice['title']!),
-                            // Text(invoice['date']!),
-                            // Text(invoice['fix']!),
-                            // Text(invoice['due']!),
-                            // Text(invoice['amount']!),
+                            ),
                           ],
                         ),
                       ),

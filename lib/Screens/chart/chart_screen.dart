@@ -10,59 +10,69 @@ class PurchaseAnalysisScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: customAppbar(context, "Purchase Analysis", false, null),
-      body: ListView(
+      body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: Column(
+          Expanded(
+            child: ListView(
               children: [
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                        width: 16, height: 16, color: const Color(0xffFF3F66)),
-                    const SizedBox(width: 4),
-                    const Text('Sales in Lac',
+                Padding(
+                  padding: const EdgeInsets.only(right: 10, top: 10),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                              width: 16,
+                              height: 16,
+                              color: const Color(0xffFF3F66)),
+                          const SizedBox(width: 4),
+                          const Text('Sales in Lac',
+                              style: TextStyle(
+                                  fontSize: 11,
+                                  color: Color(0xff6F6F6E),
+                                  fontWeight: FontWeight.w500)),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 300,
+                        child: BarChartWidget(),
+                      ),
+                      const SizedBox(height: 16),
+                      const Text(
+                        'Top 10 Selling Items by Quality',
                         style: TextStyle(
-                            fontSize: 11,
-                            color: Color(0xff6F6F6E),
-                            fontWeight: FontWeight.w500)),
-                  ],
-                ),
-                const SizedBox(
-                  height: 300,
-                  child: BarChartWidget(),
-                ),
-                const SizedBox(height: 16),
-                const Text(
-                  'Top 10 Selling Items by Quality',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 16),
-                const LegendWidget(),
-                const SizedBox(
-                  height: 300,
-                  child: PieChartWidget(),
-                ),
-                const SizedBox(height: 16),
-                const Text(
-                  'Top 10 Parties by Transactions',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(width: 12, height: 12, color: Colors.red),
-                    const SizedBox(width: 4),
-                    const Text('Sales in Lac'),
-                  ],
+                            fontSize: 15, fontWeight: FontWeight.w500),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 16),
+                      const LegendWidget(),
+                      const SizedBox(
+                        height: 300,
+                        child: PieChartWidget(),
+                      ),
+                      const SizedBox(height: 16),
+                      const Text(
+                        'Top 10 Parties by Transactions',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.w500),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(width: 12, height: 12, color: Colors.red),
+                          const SizedBox(width: 4),
+                          const Text('Sales in Lac'),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
-          ),
+          )
         ],
       ),
     );
@@ -74,111 +84,133 @@ class BarChartWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BarChart(
-      BarChartData(
-        alignment: BarChartAlignment.spaceAround,
-        titlesData: FlTitlesData(
-          show: true,
-          rightTitles:
-              const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          topTitles:
-              const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          bottomTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: true,
-              getTitlesWidget: (double value, TitleMeta meta) {
-                switch (value.toInt()) {
-                  case 0:
-                    return const Text(
-                      'April',
-                      style: TextStyle(color: Color(0xff6F6F6E)),
-                    );
-                  case 1:
-                    return const Text(
-                      'May',
-                      style: TextStyle(color: Color(0xff6F6F6E)),
-                    );
-                  case 2:
-                    return const Text(
-                      'June',
-                      style: TextStyle(color: Color(0xff6F6F6E)),
-                    );
-                  case 3:
-                    return const Text(
-                      'July',
-                      style: TextStyle(color: Color(0xff6F6F6E)),
-                    );
-                  default:
-                    return const Text('');
-                }
-              },
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: SizedBox(
+        width: 800,
+        child: BarChart(
+          BarChartData(
+            groupsSpace: 0,
+            titlesData: FlTitlesData(
+              show: true,
+              rightTitles:
+                  const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+              topTitles:
+                  const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+              bottomTitles: AxisTitles(
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  getTitlesWidget: (double value, TitleMeta meta) {
+                    switch (value.toInt()) {
+                      case 0:
+                        return const Text('April',
+                            style: TextStyle(color: Color(0xff6F6F6E)));
+                      case 1:
+                        return const Text('May',
+                            style: TextStyle(color: Color(0xff6F6F6E)));
+                      case 2:
+                        return const Text('June',
+                            style: TextStyle(color: Color(0xff6F6F6E)));
+                      case 3:
+                        return const Text('July',
+                            style: TextStyle(color: Color(0xff6F6F6E)));
+                      case 4:
+                        return const Text('Aug',
+                            style: TextStyle(color: Color(0xff6F6F6E)));
+                      case 5:
+                        return const Text('Sep',
+                            style: TextStyle(color: Color(0xff6F6F6E)));
+                      case 6:
+                        return const Text('Oct',
+                            style: TextStyle(color: Color(0xff6F6F6E)));
+                      case 7:
+                        return const Text('Nav',
+                            style: TextStyle(color: Color(0xff6F6F6E)));
+                      default:
+                        return const Text('');
+                    }
+                  },
+                ),
+              ),
             ),
+            gridData: const FlGridData(
+              drawVerticalLine: true,
+            ),
+            borderData: FlBorderData(
+              show: true,
+              border: const Border(
+                left: BorderSide(color: Color(0xffD7D7D7), width: 2),
+                bottom: BorderSide(color: Color(0xffD7D7D7), width: 2),
+                right: BorderSide.none,
+                top: BorderSide.none,
+              ),
+            ),
+            barGroups: [
+              BarChartGroupData(x: 0, barRods: [
+                BarChartRodData(
+                    toY: 45,
+                    color: Colors.red,
+                    width: 45,
+                    borderRadius: BorderRadius.circular(0))
+              ]),
+              BarChartGroupData(x: 1, barRods: [
+                BarChartRodData(
+                    toY: 35,
+                    color: Colors.orange,
+                    width: 45,
+                    borderRadius: BorderRadius.circular(0))
+              ]),
+              BarChartGroupData(x: 2, barRods: [
+                BarChartRodData(
+                    toY: 25,
+                    color: Colors.amber,
+                    width: 45,
+                    borderRadius: BorderRadius.circular(0))
+              ]),
+              BarChartGroupData(x: 3, barRods: [
+                BarChartRodData(
+                    toY: 20,
+                    color: Colors.yellow,
+                    width: 45,
+                    borderRadius: BorderRadius.circular(0))
+              ]),
+              BarChartGroupData(x: 4, barRods: [
+                BarChartRodData(
+                    toY: 20,
+                    color: Colors.green,
+                    width: 45,
+                    borderRadius: BorderRadius.circular(0))
+              ]),
+              BarChartGroupData(x: 5, barRods: [
+                BarChartRodData(
+                    toY: 20,
+                    color: Colors.blue,
+                    width: 45,
+                    borderRadius: BorderRadius.circular(0))
+              ]),
+              BarChartGroupData(x: 6, barRods: [
+                BarChartRodData(
+                    toY: 20,
+                    color: Colors.orange,
+                    width: 45,
+                    borderRadius: BorderRadius.circular(0))
+              ]),
+              BarChartGroupData(x: 7, barRods: [
+                BarChartRodData(
+                    toY: 20,
+                    color: Colors.yellow,
+                    width: 45,
+                    borderRadius: BorderRadius.circular(0))
+              ]),
+              // Add more BarChartGroupData if needed
+            ],
           ),
         ),
-        gridData: const FlGridData(
-          drawVerticalLine: true,
-        ),
-        borderData: FlBorderData(
-          show: true,
-          border: const Border(
-            left: BorderSide(color: Color(0xffD7D7D7), width: 2),
-            bottom: BorderSide(color: Color(0xffD7D7D7), width: 2),
-            right: BorderSide.none,
-            top: BorderSide.none,
-          ),
-        ),
-        barGroups: [
-          BarChartGroupData(
-            x: 0,
-            barRods: [
-              BarChartRodData(
-                toY: 45,
-                color: Colors.red,
-                width: 45,
-                borderRadius: BorderRadius.circular(0),
-              )
-            ],
-          ),
-          BarChartGroupData(
-            x: 1,
-            barRods: [
-              BarChartRodData(
-                toY: 35,
-                color: Colors.orange,
-                width: 45,
-                borderRadius: BorderRadius.circular(0),
-              )
-            ],
-          ),
-          BarChartGroupData(
-            x: 2,
-            barRods: [
-              BarChartRodData(
-                toY: 25,
-                color: Colors.amber,
-                width: 45,
-                borderRadius: BorderRadius.circular(0),
-              )
-            ],
-          ),
-          BarChartGroupData(
-            x: 3,
-            barRods: [
-              BarChartRodData(
-                toY: 20,
-                color: Colors.yellow,
-                width: 45,
-                borderRadius: BorderRadius.circular(0),
-              )
-            ],
-          ),
-        ],
       ),
     );
   }
 }
 
-/// Pie Chart Widget using fl_chart
 class PieChartWidget extends StatelessWidget {
   const PieChartWidget({super.key});
 
