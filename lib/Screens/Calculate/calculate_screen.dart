@@ -11,7 +11,7 @@ class CalculateScreen extends StatefulWidget {
   final String startDate;
   final String endDate;
 
-  CalculateScreen(
+  const CalculateScreen(
       {super.key,
       required this.title,
       required this.startDate,
