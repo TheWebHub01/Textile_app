@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:textile_app/Screens/Forgot/forgot_password_screen.dart';
-import 'package:textile_app/Screens/Home/home_screen.dart';
 import 'package:textile_app/Screens/Signup/signup_screen.dart';
 import 'package:textile_app/Screens/companys_name.dart';
 import 'package:textile_app/progress_loader/progress_loader.dart';
